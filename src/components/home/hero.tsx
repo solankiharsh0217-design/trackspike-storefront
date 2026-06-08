@@ -32,12 +32,12 @@ export function Hero() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex-1 flex items-center">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-36 w-full">
+      <div className="relative z-10 flex-1">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 w-full">
           <div className="grid lg:grid-cols-12 gap-8 items-center">
 
             {/* Text — 7 cols */}
-            <div className="lg:col-span-7 space-y-10">
+            <div className="lg:col-span-7 space-y-8">
               {/* Eyebrow label */}
               <div className="flex items-center gap-4 animate-fade-in">
                 <div className="w-10 h-px bg-accent" />
