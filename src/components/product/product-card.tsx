@@ -4,132 +4,110 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ShoppingBag, Star } from 'lucide-react';
 import { cn, formatPrice } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import type { Product } from '@/types';
 
 interface ProductCardProps {
   product: Product;
+  index?: number;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0;
 
+  const num = String(index + 1).padStart(2, '0');
+
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block bg-surface rounded-2xl border border-border overflow-hidden hover-lift"
+      className="group block bg-[#0e0e0e] rounded-2xl border border-white/[0.06] overflow-hidden hover:border-accent/25 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
     >
-      {/* Image Container */}
-      <div className="relative aspect-square bg-gradient-to-br from-stone-50 to-stone-100 overflow-hidden">
+      {/* Header row */}
+      <div className="flex items-center justify-between px-5 pt-5 pb-2">
+        <span className="text-[10px] font-bold text-accent/50 tracking-[0.25em]">{num}</span>
+        <button
+          className="text-white/15 hover:text-accent/70 transition-colors duration-200"
+          onClick={(e) => e.preventDefault()}
+          aria-label="Wishlist"
+        >
+          <Heart className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* Image area */}
+      <div className="relative mx-4 rounded-xl overflow-hidden bg-[#151515] aspect-[4/3]">
         <Image
           src={product.images[0]}
           alt={product.name}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+          className="object-contain p-5 group-hover:scale-[1.06] transition-transform duration-700 ease-out"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
 
-        {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Discount badge */}
+        {hasDiscount && (
+          <div className="absolute top-3 left-3 bg-accent text-black text-[9px] font-black px-2 py-0.5 rounded-full tracking-wide">
+            −{discountPercent}%
+          </div>
+        )}
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-2">
-          {hasDiscount && (
-            <Badge variant="accent" className="text-xs font-bold shadow-gold">
-              -{discountPercent}%
-            </Badge>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+        {/* Quick add — slides in on hover */}
+        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
           <button
-            className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-accent hover:text-white transition-all duration-200"
-            aria-label="Add to wishlist"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
+            className="w-9 h-9 bg-accent rounded-full flex items-center justify-center shadow-gold"
+            onClick={(e) => e.preventDefault()}
+            aria-label="Quick add"
           >
-            <Heart className="w-4 h-4" />
-          </button>
-          <button
-            className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-accent hover:text-white transition-all duration-200"
-            aria-label="Quick add to cart"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <ShoppingBag className="w-4 h-4" />
+            <ShoppingBag className="w-3.5 h-3.5 text-black" />
           </button>
         </div>
-
-        {/* Bottom gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/10 to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <div className="flex items-center gap-1 mb-2">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={cn(
-                'w-3 h-3',
-                i < 4 ? 'fill-accent text-accent' : 'fill-border text-border'
-              )}
-            />
-          ))}
-          <span className="text-xs text-secondary/60 ml-1">(4.0)</span>
-        </div>
-
-        <p className="text-xs text-secondary/50 uppercase tracking-wider mb-1 font-medium">
+      {/* Info */}
+      <div className="px-5 pt-4 pb-5">
+        <p className="text-white/20 text-[9px] font-semibold uppercase tracking-[0.25em] mb-2">
           {product.brand}
         </p>
-        <h3 className="font-heading font-semibold text-primary group-hover:text-accent transition-colors duration-200 line-clamp-1 text-base">
-          {product.name}
-        </h3>
-        <p className="text-sm text-secondary/70 mt-1.5 line-clamp-1">
-          {product.description}
-        </p>
-
-        {/* Price */}
-        <div className="flex items-center gap-2 mt-3">
-          <span
-            className={cn(
-              'font-bold text-lg',
-              hasDiscount ? 'text-accent' : 'text-primary'
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <h3 className="font-heading font-bold text-white text-[15px] leading-snug group-hover:text-accent/90 transition-colors duration-300 line-clamp-1">
+            {product.name}
+          </h3>
+          <div className="flex-shrink-0 text-right">
+            <p className={cn('font-bold text-[15px]', hasDiscount ? 'text-accent' : 'text-white')}>
+              {formatPrice(product.price)}
+            </p>
+            {hasDiscount && (
+              <p className="text-white/20 text-[10px] line-through mt-0.5">{formatPrice(product.comparePrice!)}</p>
             )}
-          >
-            {formatPrice(product.price)}
-          </span>
-          {hasDiscount && (
-            <span className="text-sm text-secondary/40 line-through">
-              {formatPrice(product.comparePrice!)}
-            </span>
-          )}
+          </div>
         </div>
 
-        {/* Colors */}
-        <div className="flex items-center gap-2 mt-3">
-          {product.colors.slice(0, 4).map((color) => (
-            <div
-              key={color.name}
-              className={cn(
-                'w-4 h-4 rounded-full border-2 transition-all duration-200',
-                color.hex === '#FFFFFF' ? 'border-gray-200' : 'border-transparent'
-              )}
-              style={{ backgroundColor: color.hex }}
-              title={color.name}
-            />
-          ))}
-          {product.colors.length > 4 && (
-            <span className="text-xs text-secondary/50 font-medium">
-              +{product.colors.length - 4}
-            </span>
-          )}
+        {/* Rating + colors */}
+        <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+          <div className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={cn('w-2.5 h-2.5', i < 4 ? 'fill-accent text-accent' : 'fill-white/10 text-white/10')}
+              />
+            ))}
+            <span className="text-white/20 text-[9px] ml-1.5">(4.0)</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            {product.colors.slice(0, 3).map((color) => (
+              <div
+                key={color.name}
+                className="w-3 h-3 rounded-full border border-white/10"
+                style={{ backgroundColor: color.hex === '#FFFFFF' ? '#e5e5e5' : color.hex }}
+                title={color.name}
+              />
+            ))}
+            {product.colors.length > 3 && (
+              <span className="text-white/20 text-[9px]">+{product.colors.length - 3}</span>
+            )}
+          </div>
         </div>
       </div>
     </Link>

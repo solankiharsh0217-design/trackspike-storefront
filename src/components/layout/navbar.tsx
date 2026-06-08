@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingBag, Menu, X, User, ChevronDown } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/store/cart-store';
 import { useUIStore } from '@/store/ui-store';
 
 const navigation = [
-  { name: 'Home', href: '/' },
   { name: 'Products', href: '/products' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
@@ -20,9 +19,7 @@ export function Navbar() {
   const { isMobileMenuOpen, toggleMobileMenu, toggleCart } = useUIStore();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,118 +27,76 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        isScrolled ? 'top-0' : 'top-0'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-700',
+        isScrolled
+          ? 'bg-[#0a0a0a]/95 backdrop-blur-2xl border-b border-white/[0.06]'
+          : 'bg-transparent'
       )}
     >
-      <nav
-        className={cn(
-          'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-3 transition-all duration-500',
-          isScrolled
-            ? 'bg-white/80 backdrop-blur-2xl border border-white/20 shadow-lg mt-0 rounded-none'
-            : 'bg-white/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-sm'
-        )}
-      >
-        <div className="flex h-16 items-center justify-between">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-0 font-heading text-xl font-bold text-primary group"
-          >
-            <span className="text-accent group-hover:text-accent-hover transition-colors duration-300">Track</span>
-            <span>Spike</span>
+          <Link href="/" className="font-heading text-lg font-bold tracking-[-0.02em] text-white group">
+            <span className="text-accent">TRACK</span>
+            <span className="text-white">SPIKE</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="relative px-4 py-2 text-sm font-medium text-secondary hover:text-primary transition-colors duration-200 rounded-lg hover:bg-primary/5"
+                className="text-[11px] font-semibold text-white/40 hover:text-white tracking-[0.15em] uppercase transition-colors duration-300"
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Actions */}
+          <div className="flex items-center gap-1">
             <button
-              className="p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
+              className="p-2.5 text-white/40 hover:text-white transition-colors duration-200"
               aria-label="Search"
             >
-              <Search className="w-5 h-5" />
-            </button>
-            <button
-              className="p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
-              aria-label="Account"
-            >
-              <User className="w-5 h-5" />
+              <Search className="w-[18px] h-[18px]" />
             </button>
             <button
               onClick={toggleCart}
-              className="relative p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
+              className="relative p-2.5 text-white/40 hover:text-white transition-colors duration-200"
               aria-label="Cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-[18px] h-[18px]" />
               {itemCount() > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-in">
-                  {itemCount()}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-1">
-            <button
-              onClick={toggleCart}
-              className="relative p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
-              aria-label="Cart"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {itemCount() > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-accent text-black text-[9px] font-bold rounded-full flex items-center justify-center">
                   {itemCount()}
                 </span>
               )}
             </button>
             <button
               onClick={toggleMobileMenu}
-              className="p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
+              className="md:hidden p-2.5 text-white/40 hover:text-white transition-colors duration-200 ml-1"
               aria-label="Menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+              {isMobileMenuOpen ? <X className="w-[18px] h-[18px]" /> : <Menu className="w-[18px] h-[18px]" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-border py-4 animate-slide-down">
+          <div className="md:hidden border-t border-white/[0.06] pb-6 animate-slide-down">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block px-4 py-3 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-colors duration-200 font-medium"
+                className="block py-4 text-[11px] font-semibold text-white/40 hover:text-white tracking-[0.15em] uppercase transition-colors duration-200"
                 onClick={() => useUIStore.getState().closeAll()}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="flex items-center gap-2 px-4 mt-4 pt-4 border-t border-border">
-              <button className="p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200">
-                <Search className="w-5 h-5" />
-              </button>
-              <button className="p-2.5 text-secondary hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-200">
-                <User className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         )}
       </nav>

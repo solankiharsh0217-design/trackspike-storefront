@@ -18,7 +18,6 @@ const mockProducts: Record<string, Product> = {
     brand: 'TrackSpike',
     category: 'running',
     images: ['/images/shoe-black.svg'],
-    model3dUrl: '/models/shoe.glb',
     colors: [
       { name: 'Black', hex: '#1C1917', images: ['/images/shoe-black.svg'] },
       { name: 'White', hex: '#FFFFFF', images: ['/images/shoe-white.svg'] },
@@ -87,7 +86,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Gallery */}
         <ProductGallery
           images={product.images}
-          model3dUrl={product.model3dUrl}
           colors={product.colors}
         />
 
