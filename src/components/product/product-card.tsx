@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Star } from 'lucide-react';
 import { cn, formatPrice } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import type { Product } from '@/types';
@@ -20,96 +20,113 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block bg-surface rounded-xl border border-border overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
+      className="group block bg-surface rounded-2xl border border-border overflow-hidden hover-lift"
     >
       {/* Image Container */}
-      <div className="relative aspect-square bg-background overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-stone-50 to-stone-100 overflow-hidden">
         <Image
           src={product.images[0]}
           alt={product.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
         />
+
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {hasDiscount && (
-            <Badge variant="accent">
+            <Badge variant="accent" className="text-xs font-bold shadow-gold">
               -{discountPercent}%
-            </Badge>
-          )}
-          {product.isFeatured && (
-            <Badge variant="warning">
-              Featured
             </Badge>
           )}
         </div>
 
         {/* Quick Actions */}
-        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
           <button
-            className="p-2 bg-surface/90 backdrop-blur-sm rounded-full shadow-md hover:bg-accent hover:text-white transition-colors duration-200"
+            className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-accent hover:text-white transition-all duration-200"
             aria-label="Add to wishlist"
             onClick={(e) => {
               e.preventDefault();
-              // TODO: Add to wishlist
             }}
           >
             <Heart className="w-4 h-4" />
           </button>
           <button
-            className="p-2 bg-surface/90 backdrop-blur-sm rounded-full shadow-md hover:bg-accent hover:text-white transition-colors duration-200"
+            className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-accent hover:text-white transition-all duration-200"
             aria-label="Quick add to cart"
             onClick={(e) => {
               e.preventDefault();
-              // TODO: Quick add to cart
             }}
           >
             <ShoppingBag className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Bottom gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/10 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <p className="text-xs text-secondary/60 uppercase tracking-wide mb-1">
+      <div className="p-5">
+        <div className="flex items-center gap-1 mb-2">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={cn(
+                'w-3 h-3',
+                i < 4 ? 'fill-accent text-accent' : 'fill-border text-border'
+              )}
+            />
+          ))}
+          <span className="text-xs text-secondary/60 ml-1">(4.0)</span>
+        </div>
+
+        <p className="text-xs text-secondary/50 uppercase tracking-wider mb-1 font-medium">
           {product.brand}
         </p>
-        <h3 className="font-heading font-semibold text-primary group-hover:text-accent transition-colors duration-200 line-clamp-1">
+        <h3 className="font-heading font-semibold text-primary group-hover:text-accent transition-colors duration-200 line-clamp-1 text-base">
           {product.name}
         </h3>
-        <p className="text-sm text-secondary mt-1 line-clamp-2">
+        <p className="text-sm text-secondary/70 mt-1.5 line-clamp-1">
           {product.description}
         </p>
 
         {/* Price */}
         <div className="flex items-center gap-2 mt-3">
-          <span className={cn(
-            'font-semibold',
-            hasDiscount ? 'text-accent' : 'text-primary'
-          )}>
+          <span
+            className={cn(
+              'font-bold text-lg',
+              hasDiscount ? 'text-accent' : 'text-primary'
+            )}
+          >
             {formatPrice(product.price)}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-secondary/60 line-through">
+            <span className="text-sm text-secondary/40 line-through">
               {formatPrice(product.comparePrice!)}
             </span>
           )}
         </div>
 
         {/* Colors */}
-        <div className="flex items-center gap-1.5 mt-3">
+        <div className="flex items-center gap-2 mt-3">
           {product.colors.slice(0, 4).map((color) => (
             <div
               key={color.name}
-              className="w-4 h-4 rounded-full border border-border"
+              className={cn(
+                'w-4 h-4 rounded-full border-2 transition-all duration-200',
+                color.hex === '#FFFFFF' ? 'border-gray-200' : 'border-transparent'
+              )}
               style={{ backgroundColor: color.hex }}
               title={color.name}
             />
           ))}
           {product.colors.length > 4 && (
-            <span className="text-xs text-secondary/60">
+            <span className="text-xs text-secondary/50 font-medium">
               +{product.colors.length - 4}
             </span>
           )}

@@ -5,7 +5,6 @@ import { ProductCard } from './product-card';
 import { ProductCardSkeleton } from '@/components/ui/skeleton';
 import type { Product } from '@/types';
 
-// Mock data - Replace with API call
 const mockRelatedProducts: Product[] = [
   {
     id: '2',
@@ -16,10 +15,10 @@ const mockRelatedProducts: Product[] = [
     sku: 'TSP-002',
     brand: 'TrackSpike',
     category: 'casual',
-    images: ['/images/placeholder-shoe.jpg'],
+    images: ['/images/shoe-white.svg'],
     colors: [
-      { name: 'Navy', hex: '#1E3A5F' },
-      { name: 'Gray', hex: '#6B7280' },
+      { name: 'Navy', hex: '#1E3A5F', images: ['/images/shoe-white.svg'] },
+      { name: 'Gray', hex: '#6B7280', images: ['/images/shoe-white.svg'] },
     ],
     sizes: ['7', '8', '9', '10', '11', '12'],
     features: ['Comfortable', 'Stylish'],
@@ -38,10 +37,10 @@ const mockRelatedProducts: Product[] = [
     sku: 'TSP-003',
     brand: 'TrackSpike',
     category: 'trail',
-    images: ['/images/placeholder-shoe.jpg'],
+    images: ['/images/shoe-gold.svg'],
     colors: [
-      { name: 'Forest', hex: '#228B22' },
-      { name: 'Earth', hex: '#8B4513' },
+      { name: 'Forest', hex: '#228B22', images: ['/images/shoe-gold.svg'] },
+      { name: 'Earth', hex: '#8B4513', images: ['/images/shoe-gold.svg'] },
     ],
     sizes: ['7', '8', '9', '10', '11', '12'],
     features: ['Waterproof', 'Grip'],
@@ -59,10 +58,10 @@ const mockRelatedProducts: Product[] = [
     sku: 'TSP-004',
     brand: 'TrackSpike',
     category: 'running',
-    images: ['/images/placeholder-shoe.jpg'],
+    images: ['/images/shoe-black.svg'],
     colors: [
-      { name: 'Red', hex: '#DC2626' },
-      { name: 'Black', hex: '#1C1917' },
+      { name: 'Red', hex: '#DC2626', images: ['/images/shoe-black.svg'] },
+      { name: 'Black', hex: '#1C1917', images: ['/images/shoe-black.svg'] },
     ],
     sizes: ['7', '8', '9', '10', '11', '12'],
     features: ['Carbon Plate', 'Responsive'],
@@ -114,10 +113,15 @@ export function RelatedProducts({ category, currentProductId }: RelatedProductsP
 
   return (
     <section className="mt-24">
-      <h2 className="font-heading text-2xl font-bold text-primary mb-8">
-        You May Also Like
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="mb-8">
+        <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-2">
+          Related
+        </p>
+        <h2 className="font-heading text-3xl font-bold text-primary">
+          You May Also Like
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

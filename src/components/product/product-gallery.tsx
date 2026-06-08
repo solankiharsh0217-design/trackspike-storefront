@@ -6,15 +6,14 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import dynamic from 'next/dynamic';
 
-// Dynamically import 3D viewer (client-side only)
 const ShoeViewer = dynamic(
   () => import('@/components/3d/shoe-viewer').then((mod) => mod.ShoeViewer),
   {
     loading: () => (
-      <div className="w-full aspect-square bg-background rounded-2xl flex items-center justify-center">
-        <div className="text-center text-secondary/50">
+      <div className="w-full aspect-square bg-gradient-to-b from-stone-50 to-stone-100 rounded-2xl flex items-center justify-center">
+        <div className="text-center">
           <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p>Loading 3D viewer...</p>
+          <p className="text-sm text-secondary/50">Loading 3D viewer...</p>
         </div>
       </div>
     ),
@@ -25,7 +24,7 @@ const ShoeViewer = dynamic(
 interface ProductGalleryProps {
   images: string[];
   model3dUrl?: string;
-  colors: { name: string; hex: string }[];
+  colors: { name: string; hex: string; images?: string[] }[];
 }
 
 export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryProps) {
@@ -36,7 +35,7 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
   return (
     <div className="space-y-4">
       {/* Main Image / 3D Viewer */}
-      <div className="relative aspect-square bg-gradient-to-b from-stone-100 to-stone-200 rounded-2xl overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-stone-50 to-stone-100 rounded-3xl overflow-hidden border border-border">
         {show3D && model3dUrl ? (
           <ShoeViewer
             modelUrl={model3dUrl}
@@ -44,13 +43,15 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
             selectedColor={selectedColor}
           />
         ) : (
-          <Image
-            src={images[selectedImage]}
-            alt="Product image"
-            fill
-            className="object-cover"
-            priority
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src={colors[selectedImage]?.images?.[0] || images[selectedImage]}
+              alt="Product image"
+              fill
+              className="object-contain p-8"
+              priority
+            />
+          </div>
         )}
 
         {/* 3D Toggle Button */}
@@ -58,10 +59,10 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
           <button
             onClick={() => setShow3D(!show3D)}
             className={cn(
-              'absolute top-4 right-4 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
+              'absolute top-4 right-4 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300',
               show3D
-                ? 'bg-accent text-white'
-                : 'bg-surface/90 backdrop-blur-sm text-primary hover:bg-surface'
+                ? 'bg-accent text-black shadow-gold'
+                : 'glass text-primary hover:bg-white/80'
             )}
           >
             {show3D ? '2D View' : '3D View'}
@@ -70,7 +71,7 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
 
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <Badge variant="accent">New</Badge>
+          <Badge variant="accent" className="text-xs font-bold shadow-gold">New</Badge>
         </div>
       </div>
 
@@ -84,17 +85,17 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
               setShow3D(false);
             }}
             className={cn(
-              'relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200',
+              'relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300',
               selectedImage === index && !show3D
-                ? 'border-accent'
-                : 'border-transparent hover:border-border'
+                ? 'border-accent shadow-gold'
+                : 'border-border hover:border-border-hover'
             )}
           >
             <Image
-              src={image}
+              src={colors[index]?.images?.[0] || image}
               alt={`Product thumbnail ${index + 1}`}
               fill
-              className="object-cover"
+              className="object-contain p-1"
             />
           </button>
         ))}
@@ -104,12 +105,12 @@ export function ProductGallery({ images, model3dUrl, colors }: ProductGalleryPro
           <button
             onClick={() => setShow3D(true)}
             className={cn(
-              'relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-gradient-to-br from-stone-100 to-stone-200',
-              show3D ? 'border-accent' : 'border-transparent hover:border-border'
+              'relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 bg-gradient-to-br from-stone-50 to-stone-100',
+              show3D ? 'border-accent shadow-gold' : 'border-border hover:border-border-hover'
             )}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs font-medium text-secondary">3D</span>
+              <span className="text-xs font-bold text-secondary">3D</span>
             </div>
           </button>
         )}

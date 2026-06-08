@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5f5f4"/>
+      <stop offset="1" stop-color="#e7e5e4"/>
+    </linearGradient>
+    <linearGradient id="shoe" x1="120" y1="250" x2="480" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1c1917"/>
+      <stop offset="0.5" stop-color="#292524"/>
+      <stop offset="1" stop-color="#44403c"/>
+    </linearGradient>
+    <linearGradient id="sole" x1="100" y1="380" x2="500" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d4a520"/>
+      <stop offset="1" stop-color="#b8941c"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="30" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <g filter="url(#shadow)" transform="translate(0, -20)">
+    <!-- Shoe sole -->
+    <path d="M100 380 Q100 420 140 430 L460 430 Q500 420 500 380 L490 360 Q480 350 460 355 L140 355 Q120 350 110 360 Z" fill="url(#sole)"/>
+    <!-- Sole tread -->
+    <rect x="150" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <rect x="200" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <rect x="250" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <rect x="300" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <rect x="350" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <rect x="400" y="415" width="30" height="8" rx="4" fill="#a16207" opacity="0.5"/>
+    <!-- Midsole -->
+    <path d="M110 360 Q120 340 140 335 L460 335 Q480 340 490 360 L460 355 L140 355 Z" fill="#f5f5f4" stroke="#e5e5e5" stroke-width="1"/>
+    <!-- Shoe body -->
+    <path d="M140 335 Q130 300 135 270 Q140 240 170 220 L280 180 Q320 170 360 175 Q400 180 430 210 Q460 240 470 270 Q480 300 475 335 Z" fill="url(#shoe)"/>
+    <!-- Shoe upper detail -->
+    <path d="M170 220 Q200 200 250 195 Q300 190 340 195 Q380 200 410 220" fill="none" stroke="#d4a520" stroke-width="2" opacity="0.6"/>
+    <!-- Collar -->
+    <path d="M430 210 Q450 200 465 210 Q480 220 475 240 Q470 250 460 245 Q450 240 440 230 Q435 220 430 210 Z" fill="#292524"/>
+    <!-- Tongue -->
+    <path d="M380 195 Q390 170 400 155 Q410 140 420 145 Q430 150 425 170 Q420 185 410 200" fill="#292524" stroke="#44403c" stroke-width="1"/>
+    <!-- Lace holes -->
+    <circle cx="200" cy="250" r="4" fill="#44403c"/>
+    <circle cx="230" cy="240" r="4" fill="#44403c"/>
+    <circle cx="260" cy="235" r="4" fill="#44403c"/>
+    <circle cx="290" cy="232" r="4" fill="#44403c"/>
+    <circle cx="320" cy="232" r="4" fill="#44403c"/>
+    <!-- Laces -->
+    <path d="M200 250 L230 240 M230 240 L260 235 M260 235 L290 232 M290 232 L320 232" fill="none" stroke="#d4a520" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Swoosh / brand accent -->
+    <path d="M160 310 Q200 280 280 275 Q360 270 440 290" fill="none" stroke="#d4a520" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+    <!-- Heel counter -->
+    <path d="M135 270 Q130 300 140 335 L160 335 Q150 300 155 270 Z" fill="#292524"/>
+    <!-- Heel tab -->
+    <rect x="130" y="260" width="30" height="25" rx="4" fill="#d4a520"/>
+    <text x="145" y="277" text-anchor="middle" fill="#1c1917" font-size="10" font-weight="bold" font-family="sans-serif">TS</text>
+  </g>
+  <!-- Brand text -->
+  <text x="300" y="520" text-anchor="middle" fill="#1c1917" font-family="'DM Sans', sans-serif" font-size="24" font-weight="700" letter-spacing="4" opacity="0.15">TRACKSPIKE</text>
+</svg>

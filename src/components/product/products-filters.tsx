@@ -40,12 +40,12 @@ export function ProductsFilters({
   return (
     <div className="space-y-6">
       {/* Category Filter */}
-      <div className="border border-border rounded-xl overflow-hidden">
+      <div className="border border-border rounded-2xl overflow-hidden">
         <button
           onClick={() => toggleSection('category')}
-          className="w-full flex items-center justify-between p-4 bg-surface hover:bg-background transition-colors duration-200"
+          className="w-full flex items-center justify-between p-5 bg-surface hover:bg-background transition-colors duration-200"
         >
-          <span className="font-medium text-primary">Category</span>
+          <span className="font-heading font-semibold text-primary text-sm">Category</span>
           {openSections.category ? (
             <ChevronUp className="w-4 h-4 text-secondary" />
           ) : (
@@ -53,11 +53,11 @@ export function ProductsFilters({
           )}
         </button>
         {openSections.category && (
-          <div className="p-4 pt-0 space-y-2">
+          <div className="px-5 pb-5 space-y-1">
             <button
               onClick={() => onCategoryChange?.(undefined)}
               className={cn(
-                'block w-full text-left px-3 py-2 rounded-lg transition-colors duration-200',
+                'block w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium',
                 !selectedCategory
                   ? 'bg-accent/10 text-accent'
                   : 'text-secondary hover:bg-background'
@@ -70,7 +70,7 @@ export function ProductsFilters({
                 key={category.id}
                 onClick={() => onCategoryChange?.(category.id)}
                 className={cn(
-                  'flex items-center justify-between w-full text-left px-3 py-2 rounded-lg transition-colors duration-200',
+                  'flex items-center justify-between w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium',
                   selectedCategory === category.id
                     ? 'bg-accent/10 text-accent'
                     : 'text-secondary hover:bg-background'
@@ -78,7 +78,7 @@ export function ProductsFilters({
               >
                 <span>{category.name}</span>
                 {category.count && (
-                  <span className="text-xs text-secondary/60">({category.count})</span>
+                  <span className="text-xs text-secondary/50">({category.count})</span>
                 )}
               </button>
             ))}
@@ -87,12 +87,12 @@ export function ProductsFilters({
       </div>
 
       {/* Brand Filter */}
-      <div className="border border-border rounded-xl overflow-hidden">
+      <div className="border border-border rounded-2xl overflow-hidden">
         <button
           onClick={() => toggleSection('brand')}
-          className="w-full flex items-center justify-between p-4 bg-surface hover:bg-background transition-colors duration-200"
+          className="w-full flex items-center justify-between p-5 bg-surface hover:bg-background transition-colors duration-200"
         >
-          <span className="font-medium text-primary">Brand</span>
+          <span className="font-heading font-semibold text-primary text-sm">Brand</span>
           {openSections.brand ? (
             <ChevronUp className="w-4 h-4 text-secondary" />
           ) : (
@@ -100,11 +100,11 @@ export function ProductsFilters({
           )}
         </button>
         {openSections.brand && (
-          <div className="p-4 pt-0 space-y-2">
+          <div className="px-5 pb-5 space-y-1">
             <button
               onClick={() => onBrandChange?.(undefined)}
               className={cn(
-                'block w-full text-left px-3 py-2 rounded-lg transition-colors duration-200',
+                'block w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium',
                 !selectedBrand
                   ? 'bg-accent/10 text-accent'
                   : 'text-secondary hover:bg-background'
@@ -117,7 +117,7 @@ export function ProductsFilters({
                 key={brand.id}
                 onClick={() => onBrandChange?.(brand.id)}
                 className={cn(
-                  'flex items-center justify-between w-full text-left px-3 py-2 rounded-lg transition-colors duration-200',
+                  'flex items-center justify-between w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium',
                   selectedBrand === brand.id
                     ? 'bg-accent/10 text-accent'
                     : 'text-secondary hover:bg-background'
@@ -125,7 +125,7 @@ export function ProductsFilters({
               >
                 <span>{brand.name}</span>
                 {brand.count && (
-                  <span className="text-xs text-secondary/60">({brand.count})</span>
+                  <span className="text-xs text-secondary/50">({brand.count})</span>
                 )}
               </button>
             ))}
@@ -134,12 +134,12 @@ export function ProductsFilters({
       </div>
 
       {/* Price Range */}
-      <div className="border border-border rounded-xl overflow-hidden">
+      <div className="border border-border rounded-2xl overflow-hidden">
         <button
           onClick={() => toggleSection('price')}
-          className="w-full flex items-center justify-between p-4 bg-surface hover:bg-background transition-colors duration-200"
+          className="w-full flex items-center justify-between p-5 bg-surface hover:bg-background transition-colors duration-200"
         >
-          <span className="font-medium text-primary">Price Range</span>
+          <span className="font-heading font-semibold text-primary text-sm">Price Range</span>
           {openSections.price ? (
             <ChevronUp className="w-4 h-4 text-secondary" />
           ) : (
@@ -147,18 +147,18 @@ export function ProductsFilters({
           )}
         </button>
         {openSections.price && (
-          <div className="p-4 pt-0">
+          <div className="px-5 pb-5">
             <div className="flex items-center gap-4">
               <input
                 type="number"
                 placeholder="Min"
-                className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-4 py-2.5 border border-border rounded-xl text-sm focus:outline-none focus:border-accent transition-colors"
               />
               <span className="text-secondary">-</span>
               <input
                 type="number"
                 placeholder="Max"
-                className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-4 py-2.5 border border-border rounded-xl text-sm focus:outline-none focus:border-accent transition-colors"
               />
             </div>
           </div>

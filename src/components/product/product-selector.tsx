@@ -27,8 +27,6 @@ export function ProductSelector({ product }: ProductSelectorProps) {
     }
 
     setIsAdding(true);
-
-    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const colorObj = product.colors.find((c) => c.name === selectedColor);
@@ -53,11 +51,11 @@ export function ProductSelector({ product }: ProductSelectorProps) {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-background rounded-2xl border border-border">
+    <div className="space-y-6 p-6 bg-surface rounded-2xl border border-border">
       {/* Color Selection */}
       <div>
-        <h3 className="font-medium text-primary mb-3">
-          Color: <span className="text-secondary">{selectedColor || 'Select a color'}</span>
+        <h3 className="font-heading font-semibold text-primary mb-3 text-sm">
+          Color: <span className="text-secondary font-normal">{selectedColor || 'Select a color'}</span>
         </h3>
         <div className="flex flex-wrap gap-3">
           {product.colors.map((color) => (
@@ -65,10 +63,10 @@ export function ProductSelector({ product }: ProductSelectorProps) {
               key={color.name}
               onClick={() => setSelectedColor(color.name)}
               className={cn(
-                'relative w-10 h-10 rounded-full border-2 transition-all duration-200',
+                'relative w-11 h-11 rounded-full border-2 transition-all duration-300',
                 selectedColor === color.name
-                  ? 'border-accent scale-110'
-                  : 'border-border hover:border-border-hover'
+                  ? 'border-accent scale-110 shadow-gold'
+                  : 'border-border hover:border-border-hover hover:scale-105'
               )}
               style={{ backgroundColor: color.hex }}
               aria-label={`Select ${color.name}`}
@@ -89,10 +87,10 @@ export function ProductSelector({ product }: ProductSelectorProps) {
       {/* Size Selection */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium text-primary">
-            Size: <span className="text-secondary">{selectedSize || 'Select a size'}</span>
+          <h3 className="font-heading font-semibold text-primary text-sm">
+            Size: <span className="text-secondary font-normal">{selectedSize || 'Select a size'}</span>
           </h3>
-          <button className="text-sm text-accent hover:text-accent-hover transition-colors duration-200">
+          <button className="text-sm text-accent hover:text-accent-hover font-medium transition-colors duration-200">
             Size Guide
           </button>
         </div>
@@ -102,10 +100,10 @@ export function ProductSelector({ product }: ProductSelectorProps) {
               key={size}
               onClick={() => setSelectedSize(size)}
               className={cn(
-                'py-3 rounded-lg border text-sm font-medium transition-all duration-200',
+                'py-3 rounded-xl border text-sm font-semibold transition-all duration-300',
                 selectedSize === size
-                  ? 'border-accent bg-accent text-white'
-                  : 'border-border bg-surface text-primary hover:border-border-hover'
+                  ? 'border-accent bg-accent text-black shadow-gold'
+                  : 'border-border bg-background text-primary hover:border-border-hover hover:bg-surface'
               )}
             >
               {size}
@@ -119,12 +117,12 @@ export function ProductSelector({ product }: ProductSelectorProps) {
         <Button
           onClick={handleAddToCart}
           disabled={!selectedSize || isAdding}
-          className="flex-1"
+          className="flex-1 bg-accent hover:bg-accent-hover text-black font-semibold rounded-full shadow-gold hover:shadow-gold-lg transition-all duration-300"
           size="lg"
         >
           {isAdding ? (
             <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
               Adding...
             </>
           ) : (
@@ -137,7 +135,7 @@ export function ProductSelector({ product }: ProductSelectorProps) {
         <Button
           variant="outline"
           size="lg"
-          className="px-4"
+          className="px-5 border-border hover:border-accent hover:bg-accent/5 rounded-full transition-all duration-300"
           aria-label="Add to wishlist"
         >
           <Heart className="w-5 h-5" />
@@ -145,10 +143,14 @@ export function ProductSelector({ product }: ProductSelectorProps) {
       </div>
 
       {/* Stock Status */}
-      <p className="text-sm text-green-600 flex items-center gap-2">
-        <span className="w-2 h-2 bg-green-600 rounded-full" />
-        In Stock - Ready to ship
-      </p>
+      <div className="flex items-center gap-2 text-sm">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+        </span>
+        <span className="text-green-600 font-medium">In Stock</span>
+        <span className="text-secondary">- Ready to ship</span>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,6 @@ import { ProductSelector } from '@/components/product/product-selector';
 import { RelatedProducts } from '@/components/product/related-products';
 import type { Product } from '@/types';
 
-// Mock data - Replace with API call
 const mockProducts: Record<string, Product> = {
   'air-sprint-pro': {
     id: '1',
@@ -18,17 +17,12 @@ const mockProducts: Record<string, Product> = {
     sku: 'TSP-001',
     brand: 'TrackSpike',
     category: 'running',
-    images: [
-      '/images/placeholder-shoe.jpg',
-      '/images/placeholder-shoe.jpg',
-      '/images/placeholder-shoe.jpg',
-      '/images/placeholder-shoe.jpg',
-    ],
+    images: ['/images/shoe-black.svg'],
     model3dUrl: '/models/shoe.glb',
     colors: [
-      { name: 'Black', hex: '#1C1917', images: ['/images/placeholder-shoe.jpg'] },
-      { name: 'White', hex: '#FFFFFF', images: ['/images/placeholder-shoe.jpg'] },
-      { name: 'Gold', hex: '#CA8A04', images: ['/images/placeholder-shoe.jpg'] },
+      { name: 'Black', hex: '#1C1917', images: ['/images/shoe-black.svg'] },
+      { name: 'White', hex: '#FFFFFF', images: ['/images/shoe-white.svg'] },
+      { name: 'Gold', hex: '#CA8A04', images: ['/images/shoe-gold.svg'] },
     ],
     sizes: ['7', '8', '9', '10', '11', '12'],
     features: [
@@ -78,18 +72,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-secondary mb-8">
         <a href="/" className="hover:text-accent transition-colors duration-200">Home</a>
-        <span>/</span>
+        <span className="text-border">/</span>
         <a href="/products" className="hover:text-accent transition-colors duration-200">Products</a>
-        <span>/</span>
-        <span className="text-primary">{product.name}</span>
+        <span className="text-border">/</span>
+        <span className="text-primary font-medium">{product.name}</span>
       </nav>
 
       {/* Product Section */}
-      <div className="grid lg:grid-cols-2 gap-12">
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
         {/* Gallery */}
         <ProductGallery
           images={product.images}
