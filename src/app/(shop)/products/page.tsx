@@ -16,7 +16,7 @@ const brands = [
 
 export default function ProductsPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-12">
       {/* Header */}
       <div className="mb-10">
         <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-2">

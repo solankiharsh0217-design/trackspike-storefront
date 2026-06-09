@@ -11,7 +11,7 @@ export default function ShopLayout({
     <>
       <Navbar />
       <CartDrawer />
-      <main className="min-h-screen pt-20">
+      <main className="min-h-screen">
         {children}
       </main>
       <Footer />
