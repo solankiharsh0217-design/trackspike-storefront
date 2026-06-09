@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { CartDrawer } from '@/components/cart/cart-drawer';
+import { SmoothScroll } from '@/components/motion/smooth-scroll';
 
 export default function ShopLayout({
   children,
@@ -9,6 +10,7 @@ export default function ShopLayout({
 }) {
   return (
     <>
+      <SmoothScroll />
       <Navbar />
       <CartDrawer />
       <main className="min-h-screen">

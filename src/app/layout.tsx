@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
-import { DM_Sans, Inter } from 'next/font/google';
+import { Archivo, Inter } from 'next/font/google';
 import '../styles/globals.css';
 
-const dmSans = DM_Sans({
+// Display face — sporty grotesque, goes heavy for streetwear impact
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-heading',
+  variable: '--font-archivo',
   display: 'swap',
   weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-body',
+  variable: '--font-inter',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
@@ -50,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${inter.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${inter.variable}`} suppressHydrationWarning>
       <body className="antialiased">{children}</body>
     </html>
   );
