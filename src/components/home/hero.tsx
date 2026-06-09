@@ -16,9 +16,9 @@ const ticker = [
 
 export function Hero() {
   return (
-    <section className="h-screen flex flex-col bg-[#0a0a0a] overflow-hidden">
-      {/* Background atmosphere */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section className="relative h-screen flex flex-col bg-[#0a0a0a]">
+      {/* Background atmosphere — overflow-hidden here so it doesn't clip the flex layout */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 right-0 w-[700px] h-[700px] bg-accent/[0.06] rounded-full blur-[180px]" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/[0.04] rounded-full blur-[150px]" />
         <div
