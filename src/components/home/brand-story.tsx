@@ -35,7 +35,7 @@ export function BrandStory() {
               {stats.map((stat, i) => (
                 <div key={stat.label}>
                   <div className="py-8">
-                    <p className="font-heading font-black text-[clamp(2.5rem,4vw,3.5rem)] leading-none tracking-[-0.03em] text-white animate-fade-in-up" style={{ animationDelay: `${i * 0.1}s` }}>
+                    <p className="font-heading font-black text-[clamp(2.5rem,4vw,3.5rem)] leading-none tracking-[-0.03em] text-white">
                       {stat.value}
                     </p>
                     <p className="text-white/30 text-xs uppercase tracking-[0.2em] mt-2">{stat.label}</p>

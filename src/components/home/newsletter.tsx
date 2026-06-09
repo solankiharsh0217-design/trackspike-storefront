@@ -14,9 +14,9 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-28 sm:py-36 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="relative py-28 sm:py-36 bg-[#0a0a0a] overflow-hidden">
       {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/[0.05] rounded-full blur-[160px]" />
       </div>
 

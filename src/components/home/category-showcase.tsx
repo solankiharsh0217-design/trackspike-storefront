@@ -65,8 +65,7 @@ export function CategoryShowcase() {
             <Link
               key={category.name}
               href={category.href}
-              className={`group relative h-[480px] sm:h-[520px] rounded-2xl overflow-hidden bg-gradient-to-br ${category.bg} border border-white/[0.07] ${category.hoverBorder} transition-all duration-500 hover-lift animate-fade-in-up`}
-              style={{ animationDelay: `${index * 0.12}s` }}
+              className={`group relative h-[480px] sm:h-[520px] rounded-2xl overflow-hidden bg-gradient-to-br ${category.bg} border border-white/[0.07] ${category.hoverBorder} transition-all duration-500 hover-lift`}
             >
               {/* Colored glow */}
               <div className={`absolute inset-0 bg-gradient-to-br ${category.glow}`} />
