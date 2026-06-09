@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { ShoppingBag, Heart, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/store/cart-store';
 import { useUIStore } from '@/store/ui-store';
+import { SizeGuideModal } from './size-guide-modal';
 import type { Product } from '@/types';
 
 interface ProductSelectorProps {
@@ -16,34 +16,32 @@ export function ProductSelector({ product }: ProductSelectorProps) {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   const addItem = useCartStore((state) => state.addItem);
   const toggleCart = useUIStore((state) => state.toggleCart);
 
   const handleAddToCart = async () => {
     if (!selectedSize) {
-      alert('Please select a size');
+      setError(true);
       return;
     }
-
     setIsAdding(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 450));
 
     const colorObj = product.colors.find((c) => c.name === selectedColor);
-    const variant = product.variants?.find(
-      (v) => v.color === selectedColor && v.size === selectedSize
-    );
-
     addItem({
       productId: product.id,
-      variantId: variant?.id || `${product.id}-${selectedColor}-${selectedSize}`,
+      variantId: `${product.id}-${selectedColor}-${selectedSize}`,
       name: product.name,
       price: product.price,
       image: colorObj?.images?.[0] || product.images[0],
       color: selectedColor,
       size: selectedSize,
       quantity: 1,
-      stock: variant?.stock || 10,
+      stock: 10,
     });
 
     setIsAdding(false);
@@ -51,11 +49,11 @@ export function ProductSelector({ product }: ProductSelectorProps) {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-surface rounded-2xl border border-border">
-      {/* Color Selection */}
+    <div className="space-y-6 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+      {/* Color */}
       <div>
-        <h3 className="font-heading font-semibold text-primary mb-3 text-sm">
-          Color: <span className="text-secondary font-normal">{selectedColor || 'Select a color'}</span>
+        <h3 className="mb-3 text-sm font-bold text-white">
+          Color: <span className="font-normal text-white/50">{selectedColor || 'Select'}</span>
         </h3>
         <div className="flex flex-wrap gap-3">
           {product.colors.map((color) => (
@@ -63,10 +61,10 @@ export function ProductSelector({ product }: ProductSelectorProps) {
               key={color.name}
               onClick={() => setSelectedColor(color.name)}
               className={cn(
-                'relative w-11 h-11 rounded-full border-2 transition-all duration-300',
+                'relative h-11 w-11 rounded-full border-2 transition-all duration-300',
                 selectedColor === color.name
-                  ? 'border-accent scale-110 shadow-gold'
-                  : 'border-border hover:border-border-hover hover:scale-105'
+                  ? 'scale-110 border-accent'
+                  : 'border-white/15 hover:scale-105 hover:border-white/40'
               )}
               style={{ backgroundColor: color.hex }}
               aria-label={`Select ${color.name}`}
@@ -74,8 +72,8 @@ export function ProductSelector({ product }: ProductSelectorProps) {
               {selectedColor === color.name && (
                 <Check
                   className={cn(
-                    'absolute inset-0 m-auto w-5 h-5',
-                    color.hex === '#FFFFFF' ? 'text-primary' : 'text-white'
+                    'absolute inset-0 m-auto h-5 w-5',
+                    color.hex === '#FFFFFF' || color.hex === '#F0EAD6' ? 'text-black' : 'text-white'
                   )}
                 />
               )}
@@ -84,13 +82,16 @@ export function ProductSelector({ product }: ProductSelectorProps) {
         </div>
       </div>
 
-      {/* Size Selection */}
+      {/* Size */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-heading font-semibold text-primary text-sm">
-            Size: <span className="text-secondary font-normal">{selectedSize || 'Select a size'}</span>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-white">
+            Size: <span className="font-normal text-white/50">{selectedSize || 'Select'}</span>
           </h3>
-          <button className="text-sm text-accent hover:text-accent-hover font-medium transition-colors duration-200">
+          <button
+            onClick={() => setShowSizeGuide(true)}
+            className="text-xs font-semibold text-accent transition-colors hover:text-accent-hover"
+          >
             Size Guide
           </button>
         </div>
@@ -98,59 +99,70 @@ export function ProductSelector({ product }: ProductSelectorProps) {
           {product.sizes.map((size) => (
             <button
               key={size}
-              onClick={() => setSelectedSize(size)}
+              onClick={() => {
+                setSelectedSize(size);
+                setError(false);
+              }}
               className={cn(
-                'py-3 rounded-xl border text-sm font-semibold transition-all duration-300',
+                'rounded-xl border py-3 text-sm font-bold transition-all duration-300',
                 selectedSize === size
-                  ? 'border-accent bg-accent text-black shadow-gold'
-                  : 'border-border bg-background text-primary hover:border-border-hover hover:bg-surface'
+                  ? 'border-accent bg-accent text-black'
+                  : 'border-white/15 text-white hover:border-white/40'
               )}
             >
               {size}
             </button>
           ))}
         </div>
+        {error && (
+          <p className="mt-2 text-xs font-medium text-red-400">Please select a size first.</p>
+        )}
       </div>
 
-      {/* Add to Cart */}
+      {/* Add to cart */}
       <div className="flex gap-3">
-        <Button
+        <button
           onClick={handleAddToCart}
-          disabled={!selectedSize || isAdding}
-          className="flex-1 bg-accent hover:bg-accent-hover text-black font-semibold rounded-full shadow-gold hover:shadow-gold-lg transition-all duration-300"
-          size="lg"
+          disabled={isAdding}
+          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-sm font-bold uppercase tracking-wider text-black shadow-gold transition-all duration-300 hover:shadow-gold-lg disabled:opacity-60"
         >
           {isAdding ? (
             <>
-              <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-              Adding...
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
+              Adding…
             </>
           ) : (
             <>
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="h-5 w-5" />
               Add to Cart
             </>
           )}
-        </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          className="px-5 border-border hover:border-accent hover:bg-accent/5 rounded-full transition-all duration-300"
+        </button>
+        <button
+          onClick={() => setWishlisted((w) => !w)}
           aria-label="Add to wishlist"
+          className={cn(
+            'flex h-[56px] w-[56px] items-center justify-center rounded-full border transition-all duration-300',
+            wishlisted
+              ? 'border-accent bg-accent/10 text-accent'
+              : 'border-white/15 text-white hover:border-accent hover:text-accent'
+          )}
         >
-          <Heart className="w-5 h-5" />
-        </Button>
+          <Heart className={cn('h-5 w-5', wishlisted && 'fill-current')} />
+        </button>
       </div>
 
-      {/* Stock Status */}
+      {/* Stock */}
       <div className="flex items-center gap-2 text-sm">
         <span className="relative flex h-2.5 w-2.5">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
         </span>
-        <span className="text-green-600 font-medium">In Stock</span>
-        <span className="text-secondary">- Ready to ship</span>
+        <span className="font-medium text-green-400">In Stock</span>
+        <span className="text-white/40">— ships in 1–2 days</span>
       </div>
+
+      <SizeGuideModal open={showSizeGuide} onClose={() => setShowSizeGuide(false)} />
     </div>
   );
 }

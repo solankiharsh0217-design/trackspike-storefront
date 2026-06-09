@@ -3,58 +3,57 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 
 interface ProductGalleryProps {
   images: string[];
-  colors: { name: string; hex: string; images?: string[] }[];
+  name: string;
 }
 
-export function ProductGallery({ images, colors }: ProductGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(0);
-
-  const activeImage = colors[selectedImage]?.images?.[0] || images[selectedImage];
+export function ProductGallery({ images, name }: ProductGalleryProps) {
+  const [active, setActive] = useState(0);
 
   return (
-    <div className="space-y-4">
-      {/* Main Image */}
-      <div className="relative aspect-square bg-gradient-to-br from-stone-50 to-stone-100 rounded-3xl overflow-hidden border border-border">
+    <div className="lg:sticky lg:top-28 lg:self-start">
+      {/* Main image */}
+      <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/10 bg-[#161616]">
         <Image
-          src={activeImage}
-          alt="Product image"
+          src={images[active]}
+          alt={name}
           fill
-          className="object-contain p-8"
           priority
+          sizes="(max-width:1024px) 100vw, 50vw"
+          className="object-cover"
         />
-
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <Badge variant="accent" className="text-xs font-bold shadow-gold">New</Badge>
-        </div>
+        <span className="absolute left-5 top-5 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-wide text-black">
+          New
+        </span>
       </div>
 
       {/* Thumbnails */}
-      <div className="flex gap-3">
-        {images.map((image, index) => (
-          <button
-            key={index}
-            onClick={() => setSelectedImage(index)}
-            className={cn(
-              'relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300',
-              selectedImage === index
-                ? 'border-accent shadow-gold'
-                : 'border-border hover:border-border-hover'
-            )}
-          >
-            <Image
-              src={colors[index]?.images?.[0] || image}
-              alt={`Product thumbnail ${index + 1}`}
-              fill
-              className="object-contain p-1"
-            />
-          </button>
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="mt-4 flex gap-3">
+          {images.map((image, index) => (
+            <button
+              key={index}
+              onClick={() => setActive(index)}
+              className={cn(
+                'relative h-20 w-20 overflow-hidden rounded-xl border-2 transition-all duration-300',
+                active === index
+                  ? 'border-accent'
+                  : 'border-white/10 hover:border-white/30'
+              )}
+            >
+              <Image
+                src={image}
+                alt={`${name} view ${index + 1}`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
