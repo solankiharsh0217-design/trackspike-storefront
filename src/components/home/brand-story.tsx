@@ -1,84 +1,106 @@
 'use client';
 
-import { Award, Leaf, Truck, Shield } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Reveal } from '@/components/motion/reveal';
+import { CountUp } from '@/components/motion/count-up';
 
 const stats = [
-  { value: '50K+', label: 'Athletes worldwide' },
-  { value: '100+', label: 'Products crafted' },
-  { value: '4.9', label: 'Average rating' },
-  { value: '2024', label: 'Year founded' },
-];
-
-const features = [
-  { icon: Award, text: 'Premium materials sourced globally' },
-  { icon: Shield, text: '30-day comfort guarantee' },
-  { icon: Truck, text: 'Free shipping on orders over $100' },
-  { icon: Leaf, text: 'Sustainable manufacturing' },
+  { value: 50, suffix: 'K+', label: 'Athletes worldwide' },
+  { value: 10, suffix: 'M+', label: 'Miles logged' },
+  { value: 4.9, suffix: '★', label: 'Average rating', decimals: 1 },
+  { value: 2024, suffix: '', label: 'Founded', plain: true },
 ];
 
 export function BrandStory() {
   return (
-    <section className="bg-white relative overflow-hidden">
+    <section className="relative overflow-hidden bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-0">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* Image */}
+          <Reveal direction="right">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl">
+              <Image
+                src="/images/lifestyle/athlete-lacing.jpg"
+                alt="A TrackSpike athlete laces up before a session"
+                fill
+                sizes="(max-width:1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+              {/* Floating badge */}
+              <div className="absolute bottom-6 left-6 rounded-2xl bg-[#0a0a0a] px-6 py-4 text-white shadow-2xl">
+                <p className="font-heading text-3xl font-black leading-none">Est. 2024</p>
+                <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/50">
+                  Built in the USA
+                </p>
+              </div>
+            </div>
+          </Reveal>
 
-          {/* Left: Stats column — dark background */}
-          <div className="lg:col-span-4 bg-[#0a0a0a] py-20 lg:py-28 px-8 lg:px-12 relative">
-            {/* Gold accent line top */}
-            <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-accent/60 to-transparent" />
+          {/* Content */}
+          <div>
+            <Reveal direction="up">
+              <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.3em] text-accent">
+                ✦ Our Story
+              </p>
+              <h2 className="font-heading text-[clamp(2rem,4.5vw,3.5rem)] font-black uppercase leading-[0.92] tracking-[-0.03em] text-primary">
+                Made by
+                <br />
+                <span className="gradient-text">athletes, for athletes</span>
+              </h2>
+            </Reveal>
 
-            <p className="text-[10px] font-bold text-accent/60 tracking-[0.3em] uppercase mb-12">
-              By the numbers
-            </p>
+            <Reveal direction="up" delay={0.1}>
+              <div className="mt-7 max-w-xl space-y-5 text-base leading-relaxed text-secondary">
+                <p>
+                  TrackSpike started in a garage with a single belief: the gap between
+                  you and your personal best is measured in milliseconds — and the right
+                  shoe should help you close it.
+                </p>
+                <p>
+                  We obsess over every gram, every stitch, every degree of energy return.
+                  From the track to the street, we build footwear that performs as hard as
+                  you do.
+                </p>
+              </div>
+            </Reveal>
 
-            <div className="space-y-0">
-              {stats.map((stat, i) => (
-                <div key={stat.label}>
-                  <div className="py-8">
-                    <p className="font-heading font-black text-[clamp(2.5rem,4vw,3.5rem)] leading-none tracking-[-0.03em] text-white">
-                      {stat.value}
+            {/* Stats */}
+            <Reveal direction="up" delay={0.2}>
+              <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-border pt-10 sm:grid-cols-4">
+                {stats.map((stat) => (
+                  <div key={stat.label}>
+                    {stat.plain ? (
+                      <p className="font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-black leading-none text-primary">
+                        {stat.value}
+                      </p>
+                    ) : (
+                      <CountUp
+                        value={stat.value}
+                        suffix={stat.suffix}
+                        decimals={stat.decimals ?? 0}
+                        className="font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-black leading-none text-primary"
+                      />
+                    )}
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.15em] text-secondary">
+                      {stat.label}
                     </p>
-                    <p className="text-white/30 text-xs uppercase tracking-[0.2em] mt-2">{stat.label}</p>
                   </div>
-                  {i < stats.length - 1 && <div className="h-px bg-white/[0.06]" />}
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </Reveal>
 
-          {/* Right: Content */}
-          <div className="lg:col-span-8 py-20 lg:py-28 px-0 lg:px-16 xl:px-20">
-            <p className="text-[10px] font-bold text-accent tracking-[0.3em] uppercase mb-5">
-              Our Story
-            </p>
-            <h2 className="font-heading font-black text-[clamp(2rem,4vw,3.5rem)] text-primary tracking-[-0.03em] leading-[1] mb-8">
-              Crafted for Athletes,{' '}
-              <span className="gradient-text">by Athletes</span>
-            </h2>
-
-            <div className="space-y-5 text-secondary leading-relaxed mb-12 max-w-xl">
-              <p>
-                Founded in 2024, TrackSpike was born from a simple idea: create footwear that keeps up with your ambition. Every shoe we make is designed to help you push your limits and achieve your personal best.
-              </p>
-              <p>
-                We combine cutting-edge technology with timeless design to deliver shoes that perform as good as they look. From the track to the street, TrackSpike is your trusted partner.
-              </p>
-            </div>
-
-            {/* Feature list */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {features.map((feature) => (
-                <div
-                  key={feature.text}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-accent/20 hover:bg-accent/[0.02] transition-all duration-300 group"
-                >
-                  <div className="flex-shrink-0 w-9 h-9 bg-accent/8 rounded-lg flex items-center justify-center group-hover:bg-accent/15 transition-colors duration-300">
-                    <feature.icon className="w-4 h-4 text-accent" />
-                  </div>
-                  <span className="text-primary text-sm font-medium">{feature.text}</span>
-                </div>
-              ))}
-            </div>
+            <Reveal direction="up" delay={0.3}>
+              <Link
+                href="/about"
+                className="group mt-10 inline-flex items-center gap-2.5 rounded-full bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-accent hover:text-black"
+              >
+                Read Our Story
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            </Reveal>
           </div>
         </div>
       </div>

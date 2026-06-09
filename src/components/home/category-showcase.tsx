@@ -3,108 +3,101 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
+import { Reveal, RevealStagger, RevealItem } from '@/components/motion/reveal';
 
 const categories = [
   {
     name: 'Running',
+    tagline: 'Chase the clock',
     description: 'Engineered for speed and endurance',
     href: '/products?category=running',
-    image: '/images/category-running.svg',
-    bg: 'from-[#1c1408] to-[#0a0a0a]',
-    glow: 'from-[#d4a520]/25 via-[#d4a520]/5 to-transparent',
-    hoverBorder: 'hover:border-[#d4a520]/40',
+    image: '/images/lifestyle/jump-rooftop.jpg',
     num: '01',
   },
   {
     name: 'Casual',
-    description: 'Style meets everyday comfort',
+    tagline: 'Everyday icons',
+    description: 'Street-ready style, all-day comfort',
     href: '/products?category=casual',
-    image: '/images/category-casual.svg',
-    bg: 'from-[#141414] to-[#0a0a0a]',
-    glow: 'from-[#9ca3af]/20 via-[#9ca3af]/5 to-transparent',
-    hoverBorder: 'hover:border-white/20',
+    image: '/images/lifestyle/converse-tan.jpg',
     num: '02',
   },
   {
     name: 'Trail',
-    description: 'Conquer any terrain',
+    tagline: 'Off the grid',
+    description: 'Grip and protection for any terrain',
     href: '/products?category=trail',
-    image: '/images/category-trail.svg',
-    bg: 'from-[#0b1610] to-[#0a0a0a]',
-    glow: 'from-[#22c55e]/18 via-[#22c55e]/5 to-transparent',
-    hoverBorder: 'hover:border-[#22c55e]/35',
+    image: '/images/products/nb-olive.jpg',
     num: '03',
   },
 ];
 
 export function CategoryShowcase() {
   return (
-    <section className="py-24 sm:py-32 bg-[#0a0a0a] relative overflow-hidden">
-      {/* Subtle dot pattern */}
-      <div className="absolute inset-0 dot-pattern opacity-15 pointer-events-none" />
-
+    <section className="relative overflow-hidden bg-[#0a0a0a] py-24 sm:py-32">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-end justify-between mb-12 sm:mb-16">
-          <div>
-            <p className="text-[10px] font-bold text-accent/60 tracking-[0.3em] uppercase mb-4">
-              ✦ Browse
+        <div className="mb-14 flex items-end justify-between">
+          <Reveal direction="up">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.3em] text-accent/70">
+              ✦ Find Your Fit
             </p>
-            <h2 className="font-heading font-black text-[clamp(2.5rem,5vw,4rem)] text-white tracking-[-0.03em] leading-[0.95]">
-              Shop by<br />Category
+            <h2 className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
+              Shop by
+              <br />
+              Category
             </h2>
-          </div>
-          <p className="hidden sm:block text-white/20 text-sm max-w-[200px] text-right leading-relaxed">
-            Find the perfect shoe for your activity
-          </p>
+          </Reveal>
+          <Reveal direction="up" delay={0.1}>
+            <p className="hidden max-w-[220px] text-right text-sm leading-relaxed text-white/30 sm:block">
+              Three disciplines. One obsession with going faster.
+            </p>
+          </Reveal>
         </div>
 
-        {/* Categories grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-          {categories.map((category, index) => (
-            <Link
-              key={category.name}
-              href={category.href}
-              className={`group relative h-[480px] sm:h-[520px] rounded-2xl overflow-hidden bg-gradient-to-br ${category.bg} border border-white/[0.07] ${category.hoverBorder} transition-all duration-500 hover-lift`}
-            >
-              {/* Colored glow */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.glow}`} />
-
-              {/* Section number */}
-              <div className="absolute top-5 right-5 text-[10px] font-bold text-white/15 tracking-[0.2em]">
-                {category.num}
-              </div>
-
-              {/* Shoe image */}
-              <div className="absolute inset-0 flex items-center justify-center p-10 opacity-45 group-hover:opacity-65 transition-opacity duration-500 group-hover:scale-105">
+        {/* Grid */}
+        <RevealStagger className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {categories.map((category) => (
+            <RevealItem key={category.name}>
+              <Link
+                href={category.href}
+                className="group relative block h-[460px] overflow-hidden rounded-2xl border border-white/[0.07] sm:h-[540px]"
+              >
+                {/* Image */}
                 <Image
                   src={category.image}
                   alt={category.name}
-                  width={320}
-                  height={320}
-                  className="w-full h-full object-contain brightness-110 saturate-50"
+                  fill
+                  sizes="(max-width:768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-110"
                 />
-              </div>
+                {/* Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-black/20 transition-colors duration-500 group-hover:bg-black/0" />
 
-              {/* Bottom overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
+                {/* Number */}
+                <span className="absolute right-5 top-5 font-heading text-sm font-bold tracking-[0.2em] text-white/50">
+                  {category.num}
+                </span>
 
-              {/* Content */}
-              <div className="absolute inset-x-0 bottom-0 p-7">
-                <div className="translate-y-1 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="font-heading font-black text-[2rem] leading-none tracking-[-0.02em] text-white mb-2">
+                {/* Content */}
+                <div className="absolute inset-x-0 bottom-0 p-7">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
+                    {category.tagline}
+                  </p>
+                  <h3 className="mb-2 font-heading text-4xl font-black uppercase tracking-[-0.02em] text-white">
                     {category.name}
                   </h3>
-                  <p className="text-white/45 text-xs mb-5">{category.description}</p>
-                  <span className="inline-flex items-center gap-2 text-accent text-xs font-bold tracking-[0.1em] uppercase group-hover:gap-3 transition-all duration-300">
+                  <p className="mb-5 text-sm text-white/55">{category.description}</p>
+                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-white transition-all duration-300 group-hover:gap-3">
                     Shop Now
-                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform duration-300" />
+                    <ArrowUpRight className="h-4 w-4 text-accent transition-transform duration-300 group-hover:rotate-45" />
                   </span>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </RevealItem>
           ))}
-        </div>
+        </RevealStagger>
       </div>
     </section>
   );

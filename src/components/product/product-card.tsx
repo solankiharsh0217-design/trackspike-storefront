@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingBag, Star } from 'lucide-react';
+import { Heart, Plus, Star } from 'lucide-react';
 import { cn, formatPrice } from '@/lib/utils';
+import { useCartStore } from '@/store/cart-store';
 import type { Product } from '@/types';
 
 interface ProductCardProps {
@@ -12,102 +13,127 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const addItem = useCartStore((s) => s.addItem);
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0;
-
   const num = String(index + 1).padStart(2, '0');
+  const isNew = index % 4 === 1;
+
+  function quickAdd(e: React.MouseEvent) {
+    e.preventDefault();
+    const color = product.colors[0];
+    addItem({
+      productId: product.id,
+      variantId: `${product.id}-${color?.name ?? 'default'}-9`,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      color: color?.name ?? 'Default',
+      size: '9',
+      quantity: 1,
+      stock: 10,
+    });
+  }
 
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block bg-[#0e0e0e] rounded-2xl border border-white/[0.06] overflow-hidden hover:border-accent/25 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+      className="group block overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0e0e0e] transition-all duration-500 hover:border-accent/30 hover:shadow-[0_24px_70px_-20px_rgba(0,0,0,0.8)]"
     >
-      {/* Header row */}
-      <div className="flex items-center justify-between px-5 pt-5 pb-2">
-        <span className="text-[10px] font-bold text-accent/50 tracking-[0.25em]">{num}</span>
-        <button
-          className="text-white/15 hover:text-accent/70 transition-colors duration-200"
-          onClick={(e) => e.preventDefault()}
-          aria-label="Wishlist"
-        >
-          <Heart className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {/* Image area */}
-      <div className="relative mx-4 rounded-xl overflow-hidden bg-[#151515] aspect-[4/3]">
+      {/* Image */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-[#161616]">
         <Image
           src={product.images[0]}
           alt={product.name}
           fill
-          className="object-contain p-5 group-hover:scale-[1.06] transition-transform duration-700 ease-out"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
         />
 
-        {/* Discount badge */}
-        {hasDiscount && (
-          <div className="absolute top-3 left-3 bg-accent text-black text-[9px] font-black px-2 py-0.5 rounded-full tracking-wide">
-            −{discountPercent}%
+        {/* Top row badges */}
+        <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4">
+          <div className="flex flex-col gap-1.5">
+            {hasDiscount && (
+              <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-black">
+                −{discountPercent}%
+              </span>
+            )}
+            {isNew && !hasDiscount && (
+              <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-black">
+                New
+              </span>
+            )}
           </div>
-        )}
-
-        {/* Quick add — slides in on hover */}
-        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
           <button
-            className="w-9 h-9 bg-accent rounded-full flex items-center justify-center shadow-gold"
             onClick={(e) => e.preventDefault()}
-            aria-label="Quick add"
+            aria-label="Add to wishlist"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-md transition-colors duration-200 hover:text-accent"
           >
-            <ShoppingBag className="w-3.5 h-3.5 text-black" />
+            <Heart className="h-4 w-4" />
           </button>
         </div>
+
+        {/* Index watermark */}
+        <span className="absolute bottom-3 left-4 font-heading text-xs font-bold tracking-[0.2em] text-white/40">
+          {num}
+        </span>
+
+        {/* Quick add */}
+        <button
+          onClick={quickAdd}
+          className="absolute bottom-3 right-3 flex translate-y-3 items-center gap-1.5 rounded-full bg-accent px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-black opacity-0 shadow-gold transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add
+        </button>
       </div>
 
       {/* Info */}
-      <div className="px-5 pt-4 pb-5">
-        <p className="text-white/20 text-[9px] font-semibold uppercase tracking-[0.25em] mb-2">
-          {product.brand}
-        </p>
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <h3 className="font-heading font-bold text-white text-[15px] leading-snug group-hover:text-accent/90 transition-colors duration-300 line-clamp-1">
+      <div className="p-5">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/25">
+            {product.brand}
+          </p>
+          <div className="flex items-center gap-1">
+            <Star className="h-3 w-3 fill-accent text-accent" />
+            <span className="text-[10px] font-semibold text-white/40">4.9</span>
+          </div>
+        </div>
+
+        <div className="flex items-end justify-between gap-3">
+          <h3 className="font-heading text-base font-bold leading-tight text-white transition-colors duration-300 group-hover:text-accent">
             {product.name}
           </h3>
           <div className="flex-shrink-0 text-right">
-            <p className={cn('font-bold text-[15px]', hasDiscount ? 'text-accent' : 'text-white')}>
+            <p className={cn('font-heading font-black', hasDiscount ? 'text-accent' : 'text-white')}>
               {formatPrice(product.price)}
             </p>
             {hasDiscount && (
-              <p className="text-white/20 text-[10px] line-through mt-0.5">{formatPrice(product.comparePrice!)}</p>
+              <p className="text-[10px] text-white/25 line-through">
+                {formatPrice(product.comparePrice!)}
+              </p>
             )}
           </div>
         </div>
 
-        {/* Rating + colors */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={cn('w-2.5 h-2.5', i < 4 ? 'fill-accent text-accent' : 'fill-white/10 text-white/10')}
-              />
-            ))}
-            <span className="text-white/20 text-[9px] ml-1.5">(4.0)</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {product.colors.slice(0, 3).map((color) => (
-              <div
-                key={color.name}
-                className="w-3 h-3 rounded-full border border-white/10"
-                style={{ backgroundColor: color.hex === '#FFFFFF' ? '#e5e5e5' : color.hex }}
-                title={color.name}
-              />
-            ))}
-            {product.colors.length > 3 && (
-              <span className="text-white/20 text-[9px]">+{product.colors.length - 3}</span>
-            )}
-          </div>
+        {/* Colors */}
+        <div className="mt-4 flex items-center gap-1.5 border-t border-white/[0.06] pt-4">
+          {product.colors.slice(0, 4).map((color) => (
+            <span
+              key={color.name}
+              className="h-3.5 w-3.5 rounded-full border border-white/15"
+              style={{ backgroundColor: color.hex === '#FFFFFF' ? '#e5e5e5' : color.hex }}
+              title={color.name}
+            />
+          ))}
+          {product.colors.length > 4 && (
+            <span className="text-[10px] text-white/30">+{product.colors.length - 4}</span>
+          )}
+          <span className="ml-auto text-[10px] uppercase tracking-wider text-white/30">
+            {product.category}
+          </span>
         </div>
       </div>
     </Link>
