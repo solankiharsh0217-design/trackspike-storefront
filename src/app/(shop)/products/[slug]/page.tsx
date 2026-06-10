@@ -5,6 +5,7 @@ import { ProductGallery } from '@/components/product/product-gallery';
 import { ProductInfo } from '@/components/product/product-info';
 import { ProductSelector } from '@/components/product/product-selector';
 import { RelatedProducts } from '@/components/product/related-products';
+import { ReviewsSection } from '@/components/product/reviews-section';
 import { fetchProductBySlug, getAllProductSlugs } from '@/lib/products';
 
 interface ProductPageProps {
@@ -67,6 +68,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductInfo product={product} />
             <ProductSelector product={product} />
           </div>
+        </div>
+
+        {/* Reviews */}
+        <div className="mt-24">
+          <ReviewsSection productSlug={slug} />
         </div>
 
         {/* Related products */}
