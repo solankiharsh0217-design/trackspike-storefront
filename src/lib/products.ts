@@ -1,11 +1,59 @@
-import type { Product, ProductColor } from '@/types';
+import type { Product } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
+
+// Placeholder images for products without images
+const PLACEHOLDER_IMAGES = [
+  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
+  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80',
+  'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80',
+  'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&q=80',
+  'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800&q=80',
+  'https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=800&q=80',
+  'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&q=80',
+  'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?w=800&q=80',
+];
+
+/**
+ * Get placeholder image based on product index
+ */
+export function getPlaceholderImage(index: number): string {
+  return PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length];
+}
+
+/**
+ * Get product images or placeholders
+ */
+export function getProductImages(product: Product, index?: number): string[] {
+  if (product.images && product.images.length > 0) {
+    return product.images;
+  }
+  // Return placeholder based on product index or id
+  const idx = index ?? Math.abs(hashString(product.id)) % PLACEHOLDER_IMAGES.length;
+  return [PLACEHOLDER_IMAGES[idx % PLACEHOLDER_IMAGES.length]];
+}
+
+/**
+ * Simple string hash for consistent placeholder selection
+ */
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash;
+}
 
 /**
  * Transform API product to frontend format
  */
-function transformProduct(product: any): Product {
+function transformProduct(product: any, index?: number): Product {
+  const images = product.images && product.images.length > 0 
+    ? product.images 
+    : [getPlaceholderImage(index ?? 0)];
+
   return {
     ...product,
     price: typeof product.price === 'string' ? parseFloat(product.price) : product.price,
@@ -14,6 +62,7 @@ function transformProduct(product: any): Product {
       : undefined,
     colors: typeof product.colors === 'string' ? JSON.parse(product.colors || '[]') : (product.colors || []),
     weight: product.weight ? (typeof product.weight === 'string' ? parseFloat(product.weight) : product.weight) : undefined,
+    images,
     createdAt: product.createdAt ? new Date(product.createdAt) : new Date(),
     updatedAt: product.updatedAt ? new Date(product.updatedAt) : new Date(),
   };
@@ -43,7 +92,7 @@ export async function fetchProducts(params?: {
   const data = await response.json();
   return {
     ...data,
-    products: data.products.map(transformProduct),
+    products: data.products.map((p: any, i: number) => transformProduct(p, i)),
   };
 }
 
@@ -72,7 +121,7 @@ export async function fetchFeaturedProducts(): Promise<Product[]> {
     throw new Error('Failed to fetch featured products');
   }
   const products = await response.json();
-  return products.map(transformProduct);
+  return products.map((p: any, i: number) => transformProduct(p, i));
 }
 
 /**
@@ -100,7 +149,7 @@ export async function fetchRelatedProducts(slug: string): Promise<Product[]> {
     throw new Error('Failed to fetch related products');
   }
   const products = await response.json();
-  return products.map(transformProduct);
+  return products.map((p: any, i: number) => transformProduct(p, i));
 }
 
 /**

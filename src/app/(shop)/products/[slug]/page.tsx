@@ -7,8 +7,6 @@ import { ProductSelector } from '@/components/product/product-selector';
 import { RelatedProducts } from '@/components/product/related-products';
 import { fetchProductBySlug, getAllProductSlugs } from '@/lib/products';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
-
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -41,12 +39,6 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
-// A couple of lifestyle shots to enrich every product gallery
-const lifestyleViews = [
-  '/images/lifestyle/street-airmax.jpg',
-  '/images/lifestyle/jordans-track.jpg',
-];
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = await fetchProductBySlug(slug);
@@ -54,8 +46,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product) {
     notFound();
   }
-
-  const galleryImages = [...product.images, ...lifestyleViews];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -71,7 +61,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Product section */}
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <ProductGallery images={galleryImages} name={product.name} />
+          <ProductGallery images={product.images} name={product.name} />
 
           <div className="space-y-8">
             <ProductInfo product={product} />

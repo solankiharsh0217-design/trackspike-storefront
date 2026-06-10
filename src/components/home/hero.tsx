@@ -173,12 +173,16 @@ export function Hero() {
             >
               <div className="relative aspect-[4/3] xl:aspect-[16/11] rounded-3xl overflow-hidden border border-white/10">
                 <Image
-                  src={featuredProduct?.images[0] || "/images/products/flyknit-red.jpg"}
+                  src={featuredProduct?.images[0] || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&q=80"}
                   alt={featuredProduct?.name || "TrackSpike — premium track and field equipment"}
                   fill
                   priority
                   sizes="(max-width: 1024px) 0px, 55vw"
                   className="object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&q=80";
+                  }}
                 />
                 {/* Vignette */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />

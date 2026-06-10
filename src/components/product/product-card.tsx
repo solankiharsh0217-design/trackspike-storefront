@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, Plus, Star } from 'lucide-react';
@@ -12,8 +13,12 @@ interface ProductCardProps {
   index?: number;
 }
 
+// Fallback images for error states
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80';
+
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const addItem = useCartStore((s) => s.addItem);
+  const [imgSrc, setImgSrc] = useState(product.images[0] || FALLBACK_IMAGE);
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
@@ -29,7 +34,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       variantId: `${product.id}-${color?.name ?? 'default'}-9`,
       name: product.name,
       price: product.price,
-      image: product.images[0],
+      image: imgSrc,
       color: color?.name ?? 'Default',
       size: '9',
       quantity: 1,
@@ -45,11 +50,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#161616]">
         <Image
-          src={product.images[0]}
+          src={imgSrc}
           alt={product.name}
           fill
           sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+          onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
 
         {/* Top row badges */}
@@ -103,7 +109,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         </div>
 
         <div className="flex items-end justify-between gap-3">
-          <h3 className="font-heading text-base font-bold leading-tight text-white transition-colors duration-300 group-hover:text-accent">
+          <h3 className="font-heading text-base font-bold leading-tight text-white transition-colors duration-300 group-hover:text-accent line-clamp-2">
             {product.name}
           </h3>
           <div className="flex-shrink-0 text-right">

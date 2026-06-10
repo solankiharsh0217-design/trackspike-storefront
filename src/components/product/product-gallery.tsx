@@ -9,20 +9,30 @@ interface ProductGalleryProps {
   name: string;
 }
 
+// Fallback image for error states
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80';
+
 export function ProductGallery({ images, name }: ProductGalleryProps) {
   const [active, setActive] = useState(0);
+  const [imgSrc, setImgSrc] = useState(images[0] || FALLBACK_IMAGE);
+
+  const handleThumbnailClick = (index: number) => {
+    setActive(index);
+    setImgSrc(images[index] || FALLBACK_IMAGE);
+  };
 
   return (
     <div className="lg:sticky lg:top-28 lg:self-start">
       {/* Main image */}
       <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/10 bg-[#161616]">
         <Image
-          src={images[active]}
+          src={imgSrc}
           alt={name}
           fill
           priority
           sizes="(max-width:1024px) 100vw, 50vw"
           className="object-cover"
+          onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
         <span className="absolute left-5 top-5 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-wide text-black">
           New
@@ -35,7 +45,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => setActive(index)}
+              onClick={() => handleThumbnailClick(index)}
               className={cn(
                 'relative h-20 w-20 overflow-hidden rounded-xl border-2 transition-all duration-300',
                 active === index
@@ -49,6 +59,10 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
                 fill
                 sizes="80px"
                 className="object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = FALLBACK_IMAGE;
+                }}
               />
             </button>
           ))}
