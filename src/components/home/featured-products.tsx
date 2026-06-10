@@ -24,18 +24,18 @@ export function FeaturedProducts() {
       <section className="relative overflow-hidden bg-[#0a0a0a] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.3em] text-accent/70">
-              ✦ The Lineup
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-accent/60">
+              The Lineup
             </p>
-            <h2 className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
+            <h2 className="font-heading text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
               Trending
               <br />
               Now
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-80 rounded-2xl bg-white/5 animate-pulse" />
+              <div key={i} className="aspect-[4/5] rounded-3xl bg-white/[0.03] animate-pulse" />
             ))}
           </div>
         </div>
@@ -49,10 +49,10 @@ export function FeaturedProducts() {
         {/* Header */}
         <div className="mb-14 flex items-end justify-between">
           <Reveal direction="up">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.3em] text-accent/70">
-              ✦ The Lineup
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-accent/60">
+              The Lineup
             </p>
-            <h2 className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
+            <h2 className="font-heading text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
               Trending
               <br />
               Now
@@ -61,7 +61,7 @@ export function FeaturedProducts() {
           <Reveal direction="up" delay={0.1}>
             <Link
               href="/products"
-              className="group hidden items-center gap-2 text-sm font-bold uppercase tracking-wider text-white/50 transition-colors duration-300 hover:text-accent sm:flex"
+              className="group hidden items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white/30 transition-colors duration-300 hover:text-accent sm:flex"
             >
               View All
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -70,7 +70,7 @@ export function FeaturedProducts() {
         </div>
 
         {/* Grid */}
-        <RevealStagger className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <RevealStagger className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product, index) => (
             <RevealItem key={product.id}>
               <ProductCard product={product} index={index} />
@@ -79,10 +79,10 @@ export function FeaturedProducts() {
         </RevealStagger>
 
         {/* Mobile view all */}
-        <div className="mt-10 text-center sm:hidden">
+        <div className="mt-12 text-center sm:hidden">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent"
+            className="inline-flex items-center gap-2 rounded-full bg-white/[0.03] px-6 py-3 text-[11px] font-bold uppercase tracking-wider text-white/50 transition-all hover:bg-white/[0.06] hover:text-accent"
           >
             View All Products
             <ArrowRight className="h-4 w-4" />

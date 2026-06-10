@@ -49,27 +49,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="mx-auto max-w-7xl px-4 pt-28 pb-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="mb-8 flex items-center gap-2 text-xs uppercase tracking-wider text-white/40">
+        <nav className="mb-10 flex items-center gap-2 text-[11px] uppercase tracking-wider text-white/30">
           <Link href="/" className="transition-colors hover:text-accent">Home</Link>
-          <span className="text-white/20">/</span>
+          <span className="text-white/15">/</span>
           <Link href="/products" className="transition-colors hover:text-accent">Products</Link>
-          <span className="text-white/20">/</span>
-          <span className="text-white/70">{product.name}</span>
+          <span className="text-white/15">/</span>
+          <span className="text-white/50">{product.name}</span>
         </nav>
 
         {/* Product section */}
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <ProductGallery images={product.images} name={product.name} />
 
-          <div className="space-y-8">
+          <div className="flex flex-col gap-8">
             <ProductInfo product={product} />
             <ProductSelector product={product} />
           </div>
         </div>
 
-        <RelatedProducts slug={slug} />
+        {/* Related products */}
+        <div className="mt-24 border-t border-white/[0.04] pt-16">
+          <RelatedProducts slug={slug} />
+        </div>
       </div>
     </div>
   );

@@ -9,8 +9,7 @@ interface ProductGalleryProps {
   name: string;
 }
 
-// Fallback image for error states
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80';
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&q=80';
 
 export function ProductGallery({ images, name }: ProductGalleryProps) {
   const [active, setActive] = useState(0);
@@ -22,16 +21,16 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
   };
 
   return (
-    <div className="lg:sticky lg:top-28 lg:self-start">
+    <div className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
       {/* Main image */}
-      <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/10 bg-[#161616]">
+      <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-[#161616]">
         <Image
           src={imgSrc}
           alt={name}
           fill
           priority
           sizes="(max-width:1024px) 100vw, 50vw"
-          className="object-cover"
+          className="object-contain p-4"
           onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
         <span className="absolute left-5 top-5 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-wide text-black">
@@ -41,15 +40,15 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
 
       {/* Thumbnails */}
       {images.length > 1 && (
-        <div className="mt-4 flex gap-3">
+        <div className="grid grid-cols-4 gap-3">
           {images.map((image, index) => (
             <button
               key={index}
               onClick={() => handleThumbnailClick(index)}
               className={cn(
-                'relative h-20 w-20 overflow-hidden rounded-xl border-2 transition-all duration-300',
+                'relative aspect-square w-full overflow-hidden rounded-xl border-2 transition-all duration-300',
                 active === index
-                  ? 'border-accent'
+                  ? 'border-accent ring-2 ring-accent/20'
                   : 'border-white/10 hover:border-white/30'
               )}
             >
@@ -57,7 +56,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
                 src={image}
                 alt={`${name} view ${index + 1}`}
                 fill
-                sizes="80px"
+                sizes="100px"
                 className="object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;

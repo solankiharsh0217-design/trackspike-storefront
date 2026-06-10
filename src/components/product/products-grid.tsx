@@ -46,7 +46,7 @@ export function ProductsGrid({ category, brand, search, sort }: ProductsGridProp
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
@@ -56,19 +56,22 @@ export function ProductsGrid({ category, brand, search, sort }: ProductsGridProp
 
   if (products.length === 0) {
     return (
-      <div className="py-20 text-center">
-        <p className="font-heading text-xl font-bold text-white">No products found.</p>
-        <p className="mt-2 text-white/40">Try adjusting your filters or search.</p>
+      <div className="py-32 text-center">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/[0.03]">
+          <span className="text-3xl">👟</span>
+        </div>
+        <p className="font-heading text-xl font-bold text-white/80">No products found.</p>
+        <p className="mt-2 text-sm text-white/30">Try adjusting your filters or search.</p>
       </div>
     );
   }
 
   return (
     <>
-      <p className="mb-6 text-xs uppercase tracking-[0.2em] text-white/40">
+      <p className="mb-8 text-[11px] uppercase tracking-[0.2em] text-white/25">
         {products.length} {products.length === 1 ? 'style' : 'styles'}
       </p>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product, i) => (
           <ProductCard key={product.id} product={product} index={i} />
         ))}

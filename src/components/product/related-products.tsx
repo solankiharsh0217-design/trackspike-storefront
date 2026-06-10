@@ -21,13 +21,13 @@ export function RelatedProducts({ slug }: RelatedProductsProps) {
   if (products.length === 0) return null;
 
   return (
-    <section className="mt-24 border-t border-white/10 pt-16">
-      <div className="mb-8">
-        <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.3em] text-accent">
-          ✦ More to Love
-        </p>
-        <h2 className="font-heading text-3xl font-black uppercase tracking-[-0.02em] text-white">
+    <section>
+      <div className="mb-10">
+        <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-accent/60">
           You May Also Like
+        </p>
+        <h2 className="font-heading text-2xl font-black uppercase tracking-[-0.02em] text-white">
+          Related Products
         </h2>
       </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
