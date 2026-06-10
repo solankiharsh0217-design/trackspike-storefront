@@ -134,7 +134,7 @@ export async function fetchCategories(): Promise<{ id: string; name: string; cou
   }
   const categories = await response.json();
   return categories.map((name: string) => ({
-    id: name.toLowerCase().replace(/\s+/g, '-'),
+    id: name,
     name,
     count: 0,
   }));
