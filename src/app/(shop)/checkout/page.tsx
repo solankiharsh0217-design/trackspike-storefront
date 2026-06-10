@@ -3,18 +3,51 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Lock, Check, ArrowLeft, CreditCard } from 'lucide-react';
+import { Lock, Check, ArrowLeft, CreditCard, Loader2 } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
 import { formatPrice } from '@/lib/utils';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
+
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCartStore();
+  const [loading, setLoading] = useState(false);
   const [placed, setPlaced] = useState(false);
 
   const subtotal = total();
   const shipping = subtotal > 100 || subtotal === 0 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const orderTotal = subtotal + shipping + tax;
+
+  async function handleCheckout() {
+    if (items.length === 0) return;
+
+    setLoading(true);
+    try {
+      // Create a cart ID for Shopify
+      const cartId = crypto.randomUUID();
+      
+      // For now, we'll show a demo checkout
+      // In production, this would redirect to Shopify checkout
+      // const response = await fetch(`${API_BASE_URL}/api/checkout/create-checkout`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ cartId, email: '' }),
+      // });
+      // const { checkoutUrl } = await response.json();
+      // window.location.href = checkoutUrl;
+
+      // Demo: simulate checkout
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      clearCart();
+      setPlaced(true);
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Checkout failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (placed) {
     return (
@@ -76,8 +109,7 @@ export default function CheckoutPage() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              clearCart();
-              setPlaced(true);
+              handleCheckout();
             }}
             className="space-y-10"
           >
@@ -103,22 +135,26 @@ export default function CheckoutPage() {
               <div className="sm:col-span-2">
                 <div className="mb-4 flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/5 p-3 text-sm text-accent">
                   <Lock className="h-4 w-4" />
-                  Secured & encrypted — this is a demo, no real charge is made.
+                  Secured &amp; encrypted — you will be redirected to Shopify for payment.
                 </div>
               </div>
-              <div className="relative sm:col-span-2">
-                <Input label="Card number" full placeholder="4242 4242 4242 4242" />
-                <CreditCard className="absolute right-4 top-[42px] h-5 w-5 text-white/30" />
-              </div>
-              <Input label="Expiry (MM/YY)" placeholder="12/28" />
-              <Input label="CVC" placeholder="123" />
             </Section>
 
             <button
               type="submit"
-              className="w-full rounded-full bg-accent py-5 text-sm font-bold uppercase tracking-wider text-black shadow-gold transition-all duration-300 hover:shadow-gold-lg"
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-5 text-sm font-bold uppercase tracking-wider text-black shadow-gold transition-all duration-300 hover:shadow-gold-lg disabled:opacity-50"
             >
-              Place Order · {formatPrice(orderTotal)}
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Continue to Payment · {formatPrice(orderTotal)}
+                </>
+              )}
             </button>
           </form>
 

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProductsGrid } from '@/components/product/products-grid';
-import { categories } from '@/lib/products';
+import { fetchCategories } from '@/lib/products';
 import { cn } from '@/lib/utils';
 
 const sortOptions = [
@@ -12,9 +12,22 @@ const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
 ];
 
+interface Category {
+  id: string;
+  name: string;
+  count: number;
+}
+
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState<string | undefined>(undefined);
   const [sort, setSort] = useState('featured');
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    fetchCategories()
+      .then(setCategories)
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">

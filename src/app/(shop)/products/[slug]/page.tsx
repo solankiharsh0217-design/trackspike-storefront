@@ -5,19 +5,26 @@ import { ProductGallery } from '@/components/product/product-gallery';
 import { ProductInfo } from '@/components/product/product-info';
 import { ProductSelector } from '@/components/product/product-selector';
 import { RelatedProducts } from '@/components/product/related-products';
-import { getProduct, products } from '@/lib/products';
+import { fetchProductBySlug, getAllProductSlugs } from '@/lib/products';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  try {
+    const slugs = await getAllProductSlugs();
+    return slugs;
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await fetchProductBySlug(slug);
 
   if (!product) {
     return { title: 'Product Not Found' };
@@ -42,7 +49,7 @@ const lifestyleViews = [
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await fetchProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -72,7 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
-        <RelatedProducts category={product.category} currentProductId={product.id} />
+        <RelatedProducts slug={slug} />
       </div>
     </div>
   );

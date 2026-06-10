@@ -2,10 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play } from 'lucide-react';
 import { Magnetic } from '@/components/motion/magnetic';
 import { CountUp } from '@/components/motion/count-up';
+import { fetchFeaturedProducts } from '@/lib/products';
+import type { Product } from '@/types';
 
 const ticker = [
   'New Drop SS26',
@@ -28,6 +31,18 @@ const word = {
 };
 
 export function Hero() {
+  const [featuredProduct, setFeaturedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    fetchFeaturedProducts()
+      .then((products) => {
+        if (products.length > 0) {
+          setFeaturedProduct(products[0]);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <section className="relative h-screen min-h-[680px] flex flex-col bg-[#0a0a0a] text-white">
       {/* Background atmosphere */}
@@ -158,8 +173,8 @@ export function Hero() {
             >
               <div className="relative aspect-[4/3] xl:aspect-[16/11] rounded-3xl overflow-hidden border border-white/10">
                 <Image
-                  src="/images/products/flyknit-red.jpg"
-                  alt="TrackSpike Velocity — signature racing flyknit"
+                  src={featuredProduct?.images[0] || "/images/products/flyknit-red.jpg"}
+                  alt={featuredProduct?.name || "TrackSpike — premium track and field equipment"}
                   fill
                   priority
                   sizes="(max-width: 1024px) 0px, 55vw"
@@ -171,13 +186,13 @@ export function Hero() {
                 {/* Floating spec tag */}
                 <div className="absolute top-5 left-5 glass-dark rounded-2xl px-4 py-3 border border-white/15">
                   <p className="text-[9px] uppercase tracking-[0.22em] text-white/50">Featured</p>
-                  <p className="text-sm font-bold">Velocity Racer</p>
+                  <p className="text-sm font-bold">{featuredProduct?.name || "Loading..."}</p>
                 </div>
 
                 {/* Price chip */}
                 <div className="absolute bottom-5 right-5 flex items-center gap-3 rounded-full bg-accent px-5 py-2.5 text-black shadow-gold">
                   <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">From</span>
-                  <span className="font-heading font-black text-lg">$149</span>
+                  <span className="font-heading font-black text-lg">${featuredProduct?.price || "0"}</span>
                 </div>
               </div>
 

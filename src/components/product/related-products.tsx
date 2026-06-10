@@ -1,15 +1,22 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { ProductCard } from './product-card';
-import { getRelatedProducts } from '@/lib/products';
+import { fetchRelatedProducts } from '@/lib/products';
+import type { Product } from '@/types';
 
 interface RelatedProductsProps {
-  category: string;
-  currentProductId: string;
+  slug: string;
 }
 
-export function RelatedProducts({ category, currentProductId }: RelatedProductsProps) {
-  const products = getRelatedProducts(category, currentProductId, 4);
+export function RelatedProducts({ slug }: RelatedProductsProps) {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetchRelatedProducts(slug)
+      .then(setProducts)
+      .catch(console.error);
+  }, [slug]);
 
   if (products.length === 0) return null;
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ProductCard } from './product-card';
 import { ProductCardSkeleton } from '@/components/ui/skeleton';
-import { products as catalog } from '@/lib/products';
+import { fetchProducts } from '@/lib/products';
 import type { Product } from '@/types';
 
 interface ProductsGridProps {
@@ -13,50 +13,35 @@ interface ProductsGridProps {
   sort?: string;
 }
 
-function sortProducts(list: Product[], sort?: string): Product[] {
-  const copy = [...list];
-  switch (sort) {
-    case 'price-asc':
-      return copy.sort((a, b) => a.price - b.price);
-    case 'price-desc':
-      return copy.sort((a, b) => b.price - a.price);
-    case 'name':
-      return copy.sort((a, b) => a.name.localeCompare(b.name));
-    default:
-      return copy;
-  }
-}
-
 export function ProductsGrid({ category, brand, search, sort }: ProductsGridProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      let filtered = catalog;
-
-      if (category) {
-        filtered = filtered.filter((p) => p.category === category);
-      }
-      if (brand) {
-        filtered = filtered.filter((p) => p.brand.toLowerCase() === brand.toLowerCase());
-      }
-      if (search) {
-        const q = search.toLowerCase();
-        filtered = filtered.filter(
-          (p) =>
-            p.name.toLowerCase().includes(q) ||
-            p.description.toLowerCase().includes(q) ||
-            (p.tags ?? []).some((t) => t.includes(q))
-        );
-      }
-
-      setProducts(sortProducts(filtered, sort));
-      setIsLoading(false);
-    }, 350);
-
-    return () => clearTimeout(timer);
+    
+    fetchProducts({ category, brand, search, limit: 100 })
+      .then(({ products: fetchedProducts }) => {
+        let sorted = [...fetchedProducts];
+        
+        switch (sort) {
+          case 'price-asc':
+            sorted.sort((a, b) => a.price - b.price);
+            break;
+          case 'price-desc':
+            sorted.sort((a, b) => b.price - a.price);
+            break;
+          case 'name':
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+          default:
+            break;
+        }
+        
+        setProducts(sorted);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   }, [category, brand, search, sort]);
 
   if (isLoading) {

@@ -18,30 +18,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://trackspike-storefront.vercel.app'),
   title: {
-    default: 'TrackSpike USA - Premium Athletic Footwear',
-    template: '%s | TrackSpike USA',
+    default: 'TrackSpike — Run Your Own Race',
+    template: '%s | TrackSpike',
   },
   description:
-    'Premium athletic and casual footwear for the modern athlete. Engineered for performance, designed for style. Shop our collection of running shoes, sneakers, and more.',
+    'Performance footwear built for those who move different. Engineered to break records, designed to break necks. Shop running, casual, trail and training kicks.',
   keywords: [
     'shoes',
-    'athletic',
-    'running',
     'sneakers',
-    'footwear',
+    'running shoes',
+    'streetwear',
+    'athletic footwear',
     'TrackSpike',
-    'premium',
-    'sports shoes',
+    'trail shoes',
+    'training shoes',
   ],
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://trackspikeusa.com',
-    siteName: 'TrackSpike USA',
-    title: 'TrackSpike USA - Premium Athletic Footwear',
+    url: 'https://trackspike-storefront.vercel.app',
+    siteName: 'TrackSpike',
+    title: 'TrackSpike — Run Your Own Race',
     description:
-      'Premium athletic and casual footwear for the modern athlete.',
+      'Performance footwear built for those who move different. Engineered to break records.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TrackSpike — Run Your Own Race',
+    description: 'Performance footwear built for those who move different.',
   },
 };
 

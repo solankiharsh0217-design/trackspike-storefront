@@ -1,12 +1,48 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/components/product/product-card';
 import { Reveal, RevealStagger, RevealItem } from '@/components/motion/reveal';
-import { featuredProducts } from '@/lib/products';
+import { fetchFeaturedProducts } from '@/lib/products';
+import type { Product } from '@/types';
 
 export function FeaturedProducts() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFeaturedProducts()
+      .then(setProducts)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="relative overflow-hidden bg-[#0a0a0a] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-14">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.3em] text-accent/70">
+              ✦ The Lineup
+            </p>
+            <h2 className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-white">
+              Trending
+              <br />
+              Now
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-80 rounded-2xl bg-white/5 animate-pulse" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative overflow-hidden bg-[#0a0a0a] py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -35,7 +71,7 @@ export function FeaturedProducts() {
 
         {/* Grid */}
         <RevealStagger className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map((product, index) => (
+          {products.map((product, index) => (
             <RevealItem key={product.id}>
               <ProductCard product={product} index={index} />
             </RevealItem>
